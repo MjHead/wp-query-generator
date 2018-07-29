@@ -1,0 +1,11 @@
+<div class="wp-query-control wp-query-control--checkbox">
+	<input 
+		class="wp-query-control__field" 
+		type="checkbox" 
+		:id="field.id" 
+		:value="value"
+      	@input="setValue"
+    >
+    <label :for="field.id" class="wp-query-control__label">{{ field.label }}</label>
+	<div class="wp-query-control__desc">{{ field.desc }}</div>
+</div>

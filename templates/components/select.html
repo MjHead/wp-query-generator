@@ -1,0 +1,12 @@
+<div class="wp-query-control wp-query-control--select">
+	<label :for="field.id" class="wp-query-control__label">{{ field.label }}</label>
+	<select 
+		class="wp-query-control__field" 
+		:id="field.id" 
+		:value="value"
+      	@input="setValue"
+    >
+    	<option v-for="(optionLabel, optionVal) in field.options" :value="optionVal">{{ optionLabel }}</option>
+	</select>
+	<div class="wp-query-control__desc">{{ field.desc }}</div>
+</div>
