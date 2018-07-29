@@ -19,6 +19,42 @@ Vue.component(
 );
 
 Vue.component(
+	'wp-query-repeater', 
+	{
+		template: '#wp-query-repeater',
+		props: [ 'field', 'value' ],
+		data: function () {
+			return {
+				defaultItem: {},
+				preparedValue: [],
+			}
+		},
+		mounted: function() {
+			var self = this;
+
+			for ( var item in this.field.children ) {
+			  Vue.set( self.defaultItem, item, '' );
+			}
+		},
+		methods: {
+			addItem: function() {
+				this.preparedValue.push( this.defaultItem );
+			},
+			setValue: function( val, index, key ) {
+				console.log(index);
+				console.log(key);
+				this.preparedValue[ index ][key] = val;
+				this.$emit( 'input', this.preparedValue );
+			},
+			currentControl: function( type ) {  		
+		  		var component = 'wp-query-' + type;
+		  		return component;
+		  	}
+		}
+	}
+);
+
+Vue.component(
 	'wp-query-select', 
 	{
 		template: '#wp-query-select',

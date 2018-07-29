@@ -203,6 +203,30 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'tab'     => 'pagination',
 					'return'  => 'bool',
 				),
+				array(
+					'id'      => 'meta_query',
+					'label'   => 'Meta query',
+					'desc'    => 'Ignore post stickiness Set meta query',
+					'type'    => 'repeater',
+					'tab'     => 'meta',
+					'children' => array(
+						'key' => array(
+							'id'      => 'key',
+							'label'   => 'Meta key',
+							'desc'    => '',
+							'type'    => 'text',
+							'return'  => 'string',
+						),
+						'value' => array(
+							'id'      => 'value',
+							'label'   => 'Meta value',
+							'desc'    => '',
+							'type'    => 'text',
+							'return'  => 'string',
+						),
+					),
+					'return'  => 'array',
+				),
 			) );
 
 		}

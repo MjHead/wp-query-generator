@@ -7,5 +7,5 @@
 		:value="value"
       	@input="setValue"
     >
-	<div class="wp-query-control__desc">{{ field.desc }}</div>
+	<div class="wp-query-control__desc" v-if="field.desc">{{ field.desc }}</div>
 </div>
