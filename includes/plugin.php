@@ -56,7 +56,7 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 				include $file;
 				$template = ob_get_clean();
 
-				printf( 
+				printf(
 					'<script type="text/x-template" id="%2$s">%1$s</script>',
 					$template,
 					'wp-query-' . $slug
@@ -65,27 +65,27 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 		}
 
 		public function assets() {
-			
+
 			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 				$prefix = '';
 			} else {
 				$prefix = '.min';
 			}
 
-			wp_register_script( 
+			wp_register_script(
 				'vuejs',
-				WPQG_URL . 'assets/js/vue' . $prefix . '.js', 
+				WPQG_URL . 'assets/js/vue' . $prefix . '.js',
 				array(),
-				'2.5.16', 
+				'2.5.16',
 				true
 			);
 
 			wp_register_script(
-				'wp-query-generator', 
+				'wp-query-generator',
 				WPQG_URL . 'assets/js/app.js',
-				array( 'vuejs' ), 
-				WPQG_VERSION, 
-				true 
+				array( 'vuejs' ),
+				WPQG_VERSION,
+				true
 			);
 
 			wp_localize_script( 'wp-query-generator', 'WPQGTabs', array(
@@ -183,18 +183,18 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'desc'    => 'Use post status',
 					'type'    => 'select',
 					'options' => array(
-						'' => 'Select...',
+						''        => 'Select...',
 						'publish' => 'Publish',
 						'pending' => 'Pending',
-						'draft' => 'Draft',
-						'future' => 'Future',
+						'draft'   => 'Draft',
+						'future'  => 'Future',
 						'private' => 'Private',
-						'trash' => 'Trash',
-						'any' => 'Any',
+						'trash'   => 'Trash',
+						'any'     => 'Any',
 					),
 					'tab'     => 'general',
 					'return'  => 'string',
-				), 
+				),
 				array(
 					'id'      => 'ignore_sticky_posts',
 					'label'   => 'Ignore sticky posts',
@@ -204,11 +204,11 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'return'  => 'bool',
 				),
 				array(
-					'id'      => 'meta_query',
-					'label'   => 'Meta query',
-					'desc'    => 'Ignore post stickiness Set meta query',
-					'type'    => 'repeater',
-					'tab'     => 'meta',
+					'id'       => 'meta_query',
+					'label'    => 'Meta query',
+					'desc'     => 'Ignore post stickiness Set meta query',
+					'type'     => 'repeater',
+					'tab'      => 'meta',
 					'children' => array(
 						'key' => array(
 							'id'      => 'key',
@@ -220,6 +220,13 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 						'value' => array(
 							'id'      => 'value',
 							'label'   => 'Meta value',
+							'desc'    => '',
+							'type'    => 'text',
+							'return'  => 'string',
+						),
+						'operator' => array(
+							'id'      => 'operator',
+							'label'   => 'Operator',
 							'desc'    => '',
 							'type'    => 'text',
 							'return'  => 'string',

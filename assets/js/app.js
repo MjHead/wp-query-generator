@@ -1,5 +1,5 @@
 Vue.component(
-	'wp-query-text', 
+	'wp-query-text',
 	{
 		template: '#wp-query-text',
 		props: [ 'field', 'value' ],
@@ -19,63 +19,69 @@ Vue.component(
 );
 
 Vue.component(
-	'wp-query-repeater', 
+	'wp-query-repeater',
 	{
 		template: '#wp-query-repeater',
 		props: [ 'field', 'value' ],
 		data: function () {
 			return {
-				defaultItem: {},
 				preparedValue: [],
-			}
-		},
-		mounted: function() {
-			var self = this;
-
-			for ( var item in this.field.children ) {
-			  Vue.set( self.defaultItem, item, '' );
-			}
+			};
 		},
 		methods: {
-			addItem: function() {
-				this.preparedValue.push( this.defaultItem );
+			getDefaultItem: function() {
+
+				var item = {};
+
+				for ( var itemKey in this.field.children ) {
+					item[ itemKey ] = '';
+				}
+
+				return item;
 			},
-			setValue: function( val, index, key ) {
-				console.log(index);
-				console.log(key);
-				this.preparedValue[ index ][key] = val;
+			addItem: function() {
+				this.preparedValue.push( this.getDefaultItem() );
 				this.$emit( 'input', this.preparedValue );
 			},
-			currentControl: function( type ) {  		
-		  		var component = 'wp-query-' + type;
-		  		return component;
-		  	}
+			setValue: function( val, index, key ) {
+
+				var currentRow = this.preparedValue[ index ];
+
+				Vue.set( currentRow, key, val );
+				Vue.set( this.preparedValue, index, currentRow );
+
+				this.$emit( 'input', this.preparedValue );
+			},
+			currentControl: function( type ) {
+				var component = 'wp-query-' + type;
+				return component;
+			}
 		}
 	}
 );
 
 Vue.component(
-	'wp-query-select', 
+	'wp-query-select',
 	{
 		template: '#wp-query-select',
 		props: [ 'field', 'value' ],
 		methods: {
 			setValue: function( $event ) {
-				this.$emit( 'input', $event.target.value )
+				this.$emit( 'input', $event.target.value );
 			}
 		}
 	}
 );
 
 Vue.component(
-	'wp-query-checkbox', 
+	'wp-query-checkbox',
 	{
 		template: '#wp-query-checkbox',
 		props: [ 'field', 'value' ],
 		data: function () {
 			return {
 				checked: this.value,
-			}
+			};
 		},
 		methods: {
 			setValue: function( $event ) {
@@ -87,45 +93,44 @@ Vue.component(
 );
 
 var WPQG = new Vue({
-  el: '#wp_query_generator',
-  data: {
-  	tabs: WPQGTabs,
-  	fields: WPQGFields,
-  	activeTab: 'general',
-  	result: {},
-  },
-  mounted: function() {
-  	var self = this;
-  	this.fields.map( function ( field ) {
-		if ( field.default ) {
-			var key = field.id,
+	el: '#wp_query_generator',
+	data: {
+		tabs: WPQGTabs,
+		fields: WPQGFields,
+		activeTab: 'general',
+		result: {},
+	},
+	created: function() {
+		var self = this;
+		this.fields.map( function ( field ) {
+			if ( field.default ) {
+				var key = field.id,
 				value = field.default;
-
-			Vue.set( self.result, key, value );
-		}
-	})
-  },
-  computed: {
-  	currentTabFields: function() {
-  		var self = this;
-  		return this.fields.filter( function ( field ) {
-			return field.tab === self.activeTab;
+				Vue.set( self.result, key, value );
+			}
 		});
-  	},
-  	formatResult: function() {
-  		return JSON.stringify( this.result );
-  	}
-  },
-  methods: {
-  	isActiveTab: function( tabID ) {
-  		return tabID === this.activeTab;
-  	},
-  	setActiveTab: function( tabID ) {
-  		this.activeTab = tabID;
-  	},
-  	currentControl: function( type ) {  		
-  		var component = 'wp-query-' + type;
-  		return component;
-  	}
-  },
+	},
+	computed: {
+		currentTabFields: function() {
+			var self = this;
+			return this.fields.filter( function ( field ) {
+				return field.tab === self.activeTab;
+			});
+		},
+		formatResult: function() {
+			return JSON.stringify( this.result );
+		}
+	},
+	methods: {
+		isActiveTab: function( tabID ) {
+			return tabID === this.activeTab;
+		},
+		setActiveTab: function( tabID ) {
+			this.activeTab = tabID;
+		},
+		currentControl: function( type ) {
+			var component = 'wp-query-' + type;
+			return component;
+		}
+	},
 });

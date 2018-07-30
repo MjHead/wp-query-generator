@@ -3,7 +3,12 @@
 	<div class="wp-query-repeater__list">
 		<div class="wp-query-repeater__row" v-for="(row, index) in preparedValue">
 			<div class="wp-query-repeater__row-item" v-for="(childValue, key) in row">
-				<component v-bind:is="currentControl( field.children[ key ].type )" :field="field.children[ key ]" :value="childValue" @input="setValue( $event, index, key )"></component>
+				<component
+					v-bind:is="currentControl( field.children[ key ].type )"
+					:field="field.children[ key ]"
+					:value="childValue"
+					@input="setValue( $event, index, key )"
+				></component>
 			</div>
 		</div>
 	</div>
