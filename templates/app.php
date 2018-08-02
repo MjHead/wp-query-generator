@@ -5,16 +5,27 @@
 		</div>
 	</div>
 	<div class="wp-query-tabs__content">
+		<h4>{{ currentTabTitle }}</h4>
 		<div class="wp-query-tabs__content-row" v-for="field in currentTabFields">
 			<component
 				v-bind:is="currentControl( field.type )"
 				:field="field"
 				v-model="result[ field.id ]"
+				v-if="fieldIsActive( field )"
 			>
 			</component>
 		</div>
 	</div>
 </div>
 <div class="wp-query-result">
-	{{ formatResult }}
+	<div class="wp-query-result__title">
+		Generated Query
+	</div>
+	<div class="wp-query-result__content">
+		{{ formatResult }}
+		<input type="hidden" id="query_to_copy" :value="formatResult">
+	</div>
+	<div class="wp-query-result__actions">
+		<button @click="copyQuery">Copy to Clipboard</button>
+	</div>
 </div>

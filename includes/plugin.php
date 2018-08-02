@@ -91,43 +91,56 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 			wp_localize_script( 'wp-query-generator', 'WPQGTabs', array(
 				array(
 					'id'    => 'general',
-					'label' => 'General'
+					'label' => 'General',
+					'title' => 'General Parameters',
 				),
 				array(
 					'id'    => 'pagination',
-					'label' => 'Pagination'
+					'label' => 'Pagination',
+					'title' => 'Pagination Parameters',
 				),
 				array(
 					'id'    => 'posts',
-					'label' => 'Post & Page'
+					'label' => 'Post & Page',
+					'title' => 'Post & Page Parameters',
 				),
 				array(
 					'id'    => 'author',
-					'label' => 'Author'
+					'label' => 'Author',
+					'title' => 'Author Parameters',
 				),
 				array(
 					'id'    => 'cat',
-					'label' => 'Category & Tag'
+					'label' => 'Category & Tag',
+					'title' => 'Category & Tag Parameters',
 				),
 				array(
 					'id'    => 'tax',
-					'label' => 'Tax Query'
+					'label' => 'Tax Query',
+					'title' => 'Taxonomy Parameters',
 				),
 				array(
 					'id'    => 'meta',
-					'label' => 'Meta Query'
+					'label' => 'Meta Query',
+					'title' => 'Meta Parameters',
 				),
 				array(
 					'id'    => 'date',
-					'label' => 'Date Query'
+					'label' => 'Date Query',
+					'title' => 'Date Parameters',
 				),
 				array(
 					'id'    => 'misc',
-					'label' => 'Misc'
+					'label' => 'Misc',
+					'title' => 'Misc Parameters',
 				),
 			) );
 
 			wp_localize_script( 'wp-query-generator', 'WPQGFields', array(
+
+				/**
+				 * Author tab
+				 */
 				array(
 					'id'     => 'author',
 					'label'  => 'Author',
@@ -144,6 +157,10 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'tab'    => 'author',
 					'return' => 'string',
 				),
+
+				/**
+				 * Category tab
+				 */
 				array(
 					'id'     => 'cat',
 					'label'  => 'Category',
@@ -151,6 +168,22 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'type'   => 'text',
 					'tab'    => 'cat',
 					'return' => 'string',
+				),
+				array(
+					'id'     => 'category_name',
+					'label'  => 'Category name',
+					'desc'   => 'Use category slug',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'category__and',
+					'label'  => 'Category and',
+					'desc'   => 'Use comma-separated list of category IDs',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'array',
 				),
 				array(
 					'id'     => 'category__in',
@@ -161,6 +194,166 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'return' => 'array',
 				),
 				array(
+					'id'     => 'category__not_in',
+					'label'  => 'Category not in',
+					'desc'   => 'Use comma-separated list of category IDs',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'array',
+				),
+				array(
+					'id'     => 'tag',
+					'label'  => 'Tag',
+					'desc'   => 'Use tag slug',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'tag_id',
+					'label'  => 'Tag ID',
+					'desc'   => 'Use tag ID',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'tag__and',
+					'label'  => 'Tag and',
+					'desc'   => 'Use comma-separated list of tag IDs',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'array',
+				),
+				array(
+					'id'     => 'tag__in',
+					'label'  => 'Tag in',
+					'desc'   => 'Use comma-separated list of tag IDs',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'array',
+				),
+				array(
+					'id'     => 'tag__not_in',
+					'label'  => 'Tag not in',
+					'desc'   => 'Use comma-separated list of tag IDs',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'array',
+				),
+				array(
+					'id'     => 'tag_slug__and',
+					'label'  => 'Tag slug and',
+					'desc'   => 'Use comma-separated list of tag slugs',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'array',
+				),
+				array(
+					'id'     => 'tag_slug__in',
+					'label'  => 'Tag slug in',
+					'desc'   => 'Use comma-separated list of tag slugs',
+					'type'   => 'text',
+					'tab'    => 'cat',
+					'return' => 'array',
+				),
+
+				/**
+				 * Posts tab
+				 */
+				array(
+					'id'     => 'p',
+					'label'  => 'Post ID',
+					'desc'   => 'Use post ID to get single post',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'name',
+					'label'  => 'Post name',
+					'desc'   => 'Use post slug to get single post',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'title',
+					'label'  => 'Post title',
+					'desc'   => 'Use post title to get single post',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'page_id',
+					'label'  => 'Page ID',
+					'desc'   => 'Use page ID to get single page',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'pagename',
+					'label'  => 'Page name',
+					'desc'   => 'Use slug to get single page',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'post_parent',
+					'label'  => 'Page parent',
+					'desc'   => 'Use page id to return only child pages. Set to 0 to return only top-level entries',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'post_parent__in',
+					'label'  => 'Page parent in',
+					'desc'   => 'Use comma-separated page ids. Specify page whose parent is in a list',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'array',
+				),
+				array(
+					'id'     => 'post_parent__not_in',
+					'label'  => 'Page parent not in',
+					'desc'   => 'Use comma-separated page ids. Specify page whose parent is <b>not</b> in a list',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'array',
+				),
+				array(
+					'id'     => 'post__in',
+					'label'  => 'Post in',
+					'desc'   => 'Use comma-separated post ids. Specify posts to retrieve',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'array',
+				),
+				array(
+					'id'     => 'post__not_in',
+					'label'  => 'Post not in',
+					'desc'   => 'Use comma-separated post ids. Specify post <b>not</b> to retrieve',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'array',
+				),
+				array(
+					'id'     => 'post_name__in',
+					'label'  => 'Post name in',
+					'desc'   => 'Use comma-separated post slugs. Specify posts to retrieve',
+					'type'   => 'text',
+					'tab'    => 'posts',
+					'return' => 'array',
+				),
+
+				/**
+				 * Pagination tab
+				 */
+				array(
 					'id'     => 'posts_per_page',
 					'label'  => 'Posts per page',
 					'desc'   => 'Number of post to show per page',
@@ -168,6 +361,42 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'tab'    => 'pagination',
 					'return' => 'string',
 				),
+				array(
+					'id'     => 'offset',
+					'label'  => 'Offset',
+					'desc'   => 'Number of post to pass over',
+					'type'   => 'text',
+					'tab'    => 'pagination',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'paged',
+					'label'  => 'Paged',
+					'desc'   => 'Number of page. Show the posts that would normally show up just on page X when using the "Older Entries" link',
+					'type'   => 'text',
+					'tab'    => 'pagination',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'page',
+					'label'  => 'Page',
+					'desc'   => 'Number of page for a static front page. Show the posts that would normally show up just on page X of a Static Front Page',
+					'type'   => 'text',
+					'tab'    => 'pagination',
+					'return' => 'string',
+				),
+				array(
+					'id'      => 'ignore_sticky_posts',
+					'label'   => 'Ignore sticky posts',
+					'desc'    => 'Ignore post stickiness ',
+					'type'    => 'checkbox',
+					'tab'     => 'pagination',
+					'return'  => 'bool',
+				),
+
+				/**
+				 * General tab
+				 */
 				array(
 					'id'      => 'post_type',
 					'label'   => 'Post type',
@@ -196,43 +425,315 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'return'  => 'string',
 				),
 				array(
-					'id'      => 'ignore_sticky_posts',
-					'label'   => 'Ignore sticky posts',
-					'desc'    => 'Ignore post stickiness ',
-					'type'    => 'checkbox',
-					'tab'     => 'pagination',
-					'return'  => 'bool',
+					'id'      => 'order',
+					'label'   => 'Order',
+					'desc'    => 'Designates the ascending or descending order of the "orderby" parameter',
+					'type'    => 'select',
+					'options' => array(
+						''     => 'Select...',
+						'ASC'  => 'ASC',
+						'DESC' => 'DESC',
+					),
+					'tab'     => 'general',
+					'return'  => 'string',
 				),
+				array(
+					'id'      => 'orderby',
+					'label'   => 'Orderby',
+					'desc'    => 'Designates the ascending or descending order of the "orderby" parameter',
+					'type'    => 'select',
+					'options' => array(
+						''               => 'Select...',
+						'none'           => 'None',
+						'ID'             => 'ID',
+						'author'         => 'Author',
+						'title'          => 'Title',
+						'name'           => 'Name',
+						'type'           => 'Type',
+						'date'           => 'Date',
+						'modified'       => 'Modified',
+						'rand'           => 'Rand',
+						'comment_count'  => 'Comment count',
+						'relevance'      => 'Relevance',
+						'menu_order'     => 'Menu order',
+						'meta_value'     => 'Meta value',
+						'meta_value_num' => 'Meta value num',
+					),
+					'tab'     => 'general',
+					'return'  => 'string',
+				),
+				array(
+					'id'         => 'meta_key',
+					'label'      => 'Met Key',
+					'desc'       => 'Custom field key to order by',
+					'type'       => 'text',
+					'tab'        => 'general',
+					'return'     => 'string',
+					'conditions' => array(
+						'orderby' => array( 'meta_value', 'meta_value_num' ),
+					),
+				),
+
+
+				/**
+				 * Meta query tab
+				 */
 				array(
 					'id'       => 'meta_query',
 					'label'    => 'Meta query',
-					'desc'     => 'Ignore post stickiness Set meta query',
+					'desc'     => 'Set meta query',
 					'type'     => 'repeater',
 					'tab'      => 'meta',
 					'children' => array(
 						'key' => array(
 							'id'      => 'key',
 							'label'   => 'Meta key',
-							'desc'    => '',
+							'desc'    => 'Custom field key to compare',
 							'type'    => 'text',
+							'default' => '',
 							'return'  => 'string',
 						),
 						'value' => array(
 							'id'      => 'value',
-							'label'   => 'Meta value',
-							'desc'    => '',
+							'label'   => 'Value',
+							'desc'    => 'Custom field value.',
 							'type'    => 'text',
+							'default' => '',
+							'return'  => 'maybearray',
+						),
+						'compare' => array(
+							'id'      => 'compare',
+							'label'   => 'Compare',
+							'desc'    => 'Operator to test',
+							'type'    => 'select',
+							'default' => 'eq',
 							'return'  => 'string',
+							'options' => array(
+								''            => 'Select...',
+								'eq'          => '=',
+								'neq'         => '!=',
+								'gth'         => '>',
+								'geq'         => '>=',
+								'lth'         => '<',
+								'leq'         => '<=',
+								'like'        => 'LIKE',
+								'not_like'    => 'NOT LIKE',
+								'in'          => 'IN',
+								'not_in'      => 'NOT IN',
+								'between'     => 'BETWEEN',
+								'not_between' => 'NOT BETWEEN',
+								'exists'      => 'EXISTS',
+								'not_exists'  => 'NOT EXISTS',
+							),
+						),
+					),
+					'return'  => 'array',
+				),
+
+				/**
+				 * Tax Query tab
+				 */
+				array(
+					'id'       => 'tax_query',
+					'label'    => 'Tax query',
+					'desc'     => 'Set tax query',
+					'type'     => 'repeater',
+					'tab'      => 'tax',
+					'children' => array(
+						'taxonomy' => array(
+							'id'      => 'taxonomy',
+							'label'   => 'Taxonomy',
+							'desc'    => 'Use taxonomy slug',
+							'type'    => 'text',
+							'default' => '',
+							'return'  => 'string',
+						),
+						'field' => array(
+							'id'      => 'field',
+							'label'   => 'Field',
+							'desc'    => 'Select taxonomy term by',
+							'type'    => 'select',
+							'default' => 'term_id',
+							'return'  => 'string',
+							'options' => array(
+								''                 => 'Select...',
+								'term_id'          => 'Term ID',
+								'name'             => 'Name',
+								'slug'             => 'Slug',
+								'term_taxonomy_id' => 'Term taxonomy ID',
+							),
+						),
+						'terms' => array(
+							'id'      => 'taxonomy',
+							'label'   => 'Taxonomy term(s)',
+							'desc'    => 'Use comma-separated list of terms (depends from Field option)',
+							'type'    => 'text',
+							'default' => '',
+							'return'  => 'array',
 						),
 						'operator' => array(
 							'id'      => 'operator',
 							'label'   => 'Operator',
 							'desc'    => '',
+							'type'    => 'select',
+							'return'  => 'string',
+							'default' => 'IN',
+							'options' => array(
+								''           => 'Select...',
+								'IN'         => 'IN',
+								'NOT IN'     => 'NOT IN',
+								'AND'        => 'AND',
+								'EXISTS'     => 'EXISTS',
+								'NOT EXISTS' => 'NOT EXISTS',
+							),
+						),
+					),
+					'return'  => 'array',
+				),
+				array(
+					'id'      => 'tax_query_relation',
+					'label'   => 'Relation',
+					'desc'    => 'The logical relationship between each inner taxonomy list',
+					'type'    => 'select',
+					'options' => array(
+						''    => 'Select...',
+						'AND' => 'AND',
+						'OR'  => 'OR',
+					),
+					'tab'     => 'tax',
+					'return'  => 'string',
+				),
+
+				/**
+				 * Date Query tab
+				 */
+				array(
+					'id'       => 'date_query',
+					'label'    => 'Date query',
+					'desc'     => 'Set date query',
+					'type'     => 'repeater',
+					'tab'      => 'date',
+					'children' => array(
+						'year' => array(
+							'id'      => 'year',
+							'label'   => 'Year',
+							'desc'    => '4 digit year',
 							'type'    => 'text',
+							'default' => '',
+							'return'  => 'string',
+						),
+						'month' => array(
+							'id'      => 'month',
+							'label'   => 'Month',
+							'desc'    => 'Month number (from 1 to 12)',
+							'type'    => 'text',
+							'default' => '',
+							'return'  => 'string',
+						),
+						'week' => array(
+							'id'      => 'week',
+							'label'   => 'Week',
+							'desc'    => 'Week of the year (from 0 to 53)',
+							'type'    => 'text',
+							'default' => '',
+							'return'  => 'string',
+						),
+						'week' => array(
+							'id'      => 'week',
+							'label'   => 'Week',
+							'desc'    => 'Week of the year (from 0 to 53)',
+							'type'    => 'text',
+							'default' => '',
+							'return'  => 'string',
+						),
+						'day' => array(
+							'id'      => 'day',
+							'label'   => 'Day',
+							'desc'    => 'Day of the month (from 1 to 31)',
+							'type'    => 'text',
+							'default' => '',
+							'return'  => 'string',
+						),
+						'after' => array(
+							'id'      => 'after',
+							'label'   => 'After',
+							'desc'    => 'Date to retrieve posts after',
+							'type'    => 'text',
+							'default' => '',
+							'return'  => 'string',
+						),
+						'before' => array(
+							'id'      => 'before',
+							'label'   => 'Before',
+							'desc'    => 'Date to retrieve posts before',
+							'type'    => 'text',
+							'default' => '',
 							'return'  => 'string',
 						),
 					),
 					'return'  => 'array',
+				),
+				array(
+					'id'      => 'date_query_relation',
+					'label'   => 'Relation',
+					'desc'    => 'The logical relationship between each inner dates list',
+					'type'    => 'select',
+					'options' => array(
+						''    => 'Select...',
+						'AND' => 'AND',
+						'OR'  => 'OR',
+					),
+					'tab'     => 'tax',
+					'return'  => 'string',
+				),
+
+				/**
+				 * Misc tab
+				 */
+				array(
+					'id'      => 'has_password',
+					'label'   => 'Has password',
+					'desc'    => 'Get posts with/without password',
+					'type'    => 'select',
+					'options' => array(
+						'' => 'Select...',
+						1  => 'Posts with passwords',
+						0  => 'Posts without passwords',
+					),
+					'tab'     => 'misc',
+					'return'  => 'string',
+				),
+				array(
+					'id'     => 'post_password',
+					'label'  => 'Post password',
+					'desc'   => 'Show posts with a particular password',
+					'type'   => 'text',
+					'tab'    => 'misc',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'comment_count',
+					'label'  => 'Comment count',
+					'desc'   => 'Format: =NUM, where - "=" is an operator and "NUM" is a comment value. Possible operators are =, !=, >, >=, <, <=',
+					'type'   => 'text',
+					'tab'    => 'misc',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'perm',
+					'label'  => 'User permission',
+					'desc'   => 'Show posts if user has the appropriate capability',
+					'type'   => 'text',
+					'tab'    => 'misc',
+					'return' => 'string',
+				),
+				array(
+					'id'     => 'post_mime_type',
+					'label'  => 'Post mime type',
+					'desc'   => 'Allowed mime types',
+					'type'   => 'text',
+					'tab'    => 'misc',
+					'return' => 'array',
 				),
 			) );
 
