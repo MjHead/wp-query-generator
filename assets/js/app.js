@@ -144,10 +144,26 @@ var WPQG = new Vue({
 		},
 	},
 	created: function() {
-		var self = this;
+
+		var self  = this;
+			saved = false;
+
+		if ( window.localStorage ) {
+			saved = window.localStorage.getItem( 'wp_query_snippet' );
+			if ( saved ) {
+				saved = JSON.parse( saved );
+			}
+		}
+
 		this.fields.map( function ( field ) {
-			if ( field.default ) {
-				var key = field.id,
+
+			var key   = field.id,
+				value = null;
+
+			if ( saved && saved[ key ] ) {
+				value = saved[ key ];
+				Vue.set( self.result, key, value );
+			} else if ( field.default ) {
 				value = field.default;
 				Vue.set( self.result, key, value );
 			}
@@ -224,6 +240,8 @@ var WPQG = new Vue({
 			result = JSON.stringify( prepared );
 			regex  = '(' + this.compareKeys.join('|') + ')';
 			regex  = new RegExp( regex );
+
+			window.localStorage.setItem( 'wp_query_snippet', JSON.stringify( this.result ) );
 
 			return result.replace( regex, function( match ) {
 				return self.compareMap[ match ];
@@ -302,6 +320,7 @@ var WPQG = new Vue({
 
 			codeToCopy.setAttribute('type', 'hidden');
 			window.getSelection().removeAllRanges();
+
 		},
 		prepareField: function( prop ) {
 
