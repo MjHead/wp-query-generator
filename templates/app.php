@@ -8,7 +8,7 @@
 		<h4>{{ currentTabTitle }}</h4>
 		<div class="wp-query-tabs__content-row" v-for="field in currentTabFields">
 			<component
-				v-bind:is="currentControl( field.type )"
+				:is="currentControl( field.type )"
 				:field="field"
 				v-model="result[ field.id ]"
 				v-if="fieldIsActive( field )"

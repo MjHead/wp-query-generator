@@ -35,11 +35,6 @@ Vue.component(
 	{
 		template: '#wp-query-repeater',
 		props: [ 'field', 'value' ],
-		data: function () {
-			return {
-				preparedValue: [],
-			};
-		},
 		methods: {
 			getDefaultItem: function() {
 
@@ -52,21 +47,21 @@ Vue.component(
 				return item;
 			},
 			addItem: function() {
-				this.preparedValue.push( this.getDefaultItem() );
-				this.$emit( 'input', this.preparedValue );
+				this.value.push( this.getDefaultItem() );
+				this.$emit( 'input', this.value );
 			},
 			removeItem: function( index ) {
-				this.preparedValue.splice( index, 1 );
-				this.$emit( 'input', this.preparedValue );
+				this.value.splice( index, 1 );
+				this.$emit( 'input', this.value );
 			},
 			setValue: function( val, index, key ) {
 
-				var currentRow = this.preparedValue[ index ];
+				var currentRow = this.value[ index ];
 
 				Vue.set( currentRow, key, val );
-				Vue.set( this.preparedValue, index, currentRow );
+				Vue.set( this.value, index, currentRow );
 
-				this.$emit( 'input', this.preparedValue );
+				this.$emit( 'input', this.value );
 			},
 			currentControl: function( type ) {
 				var component = 'wp-query-' + type;
@@ -115,21 +110,37 @@ var WPQG = new Vue({
 		fields: WPQGFields,
 		activeTab: 'general',
 		result: {},
+		compareKeys: [
+			'exp_eq',
+			'exp_neq',
+			'exp_gth',
+			'exp_geq',
+			'exp_lth',
+			'exp_leq',
+			'exp_like',
+			'exp_not_like',
+			'exp_in',
+			'exp_not_in',
+			'exp_between',
+			'exp_not_between',
+			'exp_exists',
+			'exp_not_exists'
+		],
 		compareMap: {
-			'eq' : '=',
-			'neq' : '!=',
-			'gth' : '>',
-			'geq' : '>=',
-			'lth' : '<',
-			'leq' : '<=',
-			'like' : 'LIKE',
-			'not_like' : 'NOT LIKE',
-			'in' : 'IN',
-			'not_in' : 'NOT IN',
-			'between' : 'BETWEEN',
-			'not_between' : 'NOT BETWEEN',
-			'exists' : 'EXISTS',
-			'not_exists' : 'NOT EXISTS',
+			'exp_eq' : '=',
+			'exp_neq' : '!=',
+			'exp_gth' : '>',
+			'exp_geq' : '>=',
+			'exp_lth' : '<',
+			'exp_leq' : '<=',
+			'exp_like' : 'LIKE',
+			'exp_not_like' : 'NOT LIKE',
+			'exp_in' : 'IN',
+			'exp_not_in' : 'NOT IN',
+			'exp_between' : 'BETWEEN',
+			'exp_not_between' : 'NOT BETWEEN',
+			'exp_exists' : 'EXISTS',
+			'exp_not_exists' : 'NOT EXISTS',
 		},
 	},
 	created: function() {
@@ -159,11 +170,16 @@ var WPQG = new Vue({
 		formatResult: function() {
 
 			var prepared = {},
+				result   = '',
+				regex    = '',
+				self     = this,
 				skip     = [
-					'tax_query',
+					'tax_query_items',
 					'tax_query_relation',
-					'meta_query',
+					'meta_query_items',
 					'meta_query_relation',
+					'date_query_items',
+					'date_query_relation',
 				];
 
 			for ( var prop in this.result ) {
@@ -178,8 +194,8 @@ var WPQG = new Vue({
 			}
 
 			// Add tax, meta and date queries
-			if ( this.result.tax_query && 0 < this.result.tax_query.length ) {
-				prepared.tax_query = this.toObject( this.result.tax_query );
+			if ( this.result.tax_query_items && 0 < this.result.tax_query_items.length ) {
+				prepared.tax_query = this.toObject( this.result.tax_query_items );
 
 				if ( this.result.tax_query_relation ) {
 					prepared.tax_query.relation = this.result.tax_query_relation;
@@ -187,16 +203,31 @@ var WPQG = new Vue({
 
 			}
 
-			if ( this.result.meta_query && 0 < this.result.meta_query.length ) {
-				prepared.meta_query = this.toObject( this.result.meta_query );
+			if ( this.result.date_query_items && 0 < this.result.date_query_items.length ) {
+				prepared.date_query = this.toObject( this.result.date_query_items );
 
-				if ( this.result.meta_query_relation ) {
-					prepared.tax_query.relation = this.result.meta_query_relation;
+				if ( this.result.date_query_relation ) {
+					prepared.date_query.relation = this.result.date_query_relation;
 				}
 
 			}
 
-			return JSON.stringify( prepared );
+			if ( this.result.meta_query_items && 0 < this.result.meta_query_items.length ) {
+				prepared.meta_query = this.toObject( this.result.meta_query_items );
+
+				if ( this.result.meta_query_relation ) {
+					prepared.meta_query.relation = this.result.meta_query_relation;
+				}
+
+			}
+
+			result = JSON.stringify( prepared );
+			regex  = '(' + this.compareKeys.join('|') + ')';
+			regex  = new RegExp( regex );
+
+			return result.replace( regex, function( match ) {
+				return self.compareMap[ match ];
+			} );
 
 		}
 	},
@@ -244,12 +275,7 @@ var WPQG = new Vue({
 
 			for ( var i = 0; i < arr.length; ++i ) {
 				if ( arr[ i ] !== undefined ) {
-					rv[ i ] = arr[ i ];
-
-					if ( rv[ i ].compare ) {
-						rv[ i ].compare = this.compareMap[ rv[ i ].compare ];
-					}
-
+					Vue.set( rv, i, arr[ i ] );
 				}
 			}
 

@@ -464,7 +464,7 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 				),
 				array(
 					'id'         => 'meta_key',
-					'label'      => 'Met Key',
+					'label'      => 'Meta Key',
 					'desc'       => 'Custom field key to order by',
 					'type'       => 'text',
 					'tab'        => 'general',
@@ -479,11 +479,25 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 				 * Meta query tab
 				 */
 				array(
-					'id'       => 'meta_query',
+					'id'      => 'meta_query_relation',
+					'label'   => 'Relation',
+					'desc'    => 'The logical relationship between each inner meta keys list',
+					'type'    => 'select',
+					'options' => array(
+						''    => 'Select...',
+						'AND' => 'AND',
+						'OR'  => 'OR',
+					),
+					'tab'     => 'meta',
+					'return'  => 'string',
+				),
+				array(
+					'id'       => 'meta_query_items',
 					'label'    => 'Meta query',
 					'desc'     => 'Set meta query',
 					'type'     => 'repeater',
 					'tab'      => 'meta',
+					'default'  => array(),
 					'children' => array(
 						'key' => array(
 							'id'      => 'key',
@@ -506,24 +520,23 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 							'label'   => 'Compare',
 							'desc'    => 'Operator to test',
 							'type'    => 'select',
-							'default' => 'eq',
+							'default' => 'exp_eq',
 							'return'  => 'string',
 							'options' => array(
-								''            => 'Select...',
-								'eq'          => '=',
-								'neq'         => '!=',
-								'gth'         => '>',
-								'geq'         => '>=',
-								'lth'         => '<',
-								'leq'         => '<=',
-								'like'        => 'LIKE',
-								'not_like'    => 'NOT LIKE',
-								'in'          => 'IN',
-								'not_in'      => 'NOT IN',
-								'between'     => 'BETWEEN',
-								'not_between' => 'NOT BETWEEN',
-								'exists'      => 'EXISTS',
-								'not_exists'  => 'NOT EXISTS',
+								'exp_eq'          => '=',
+								'exp_neq'         => '!=',
+								'exp_gth'         => '>',
+								'exp_geq'         => '>=',
+								'exp_lth'         => '<',
+								'exp_leq'         => '<=',
+								'exp_like'        => 'LIKE',
+								'exp_not_like'    => 'NOT LIKE',
+								'exp_in'          => 'IN',
+								'exp_not_in'      => 'NOT IN',
+								'exp_between'     => 'BETWEEN',
+								'exp_not_between' => 'NOT BETWEEN',
+								'exp_exists'      => 'EXISTS',
+								'exp_not_exists'  => 'NOT EXISTS',
 							),
 						),
 					),
@@ -534,10 +547,24 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 				 * Tax Query tab
 				 */
 				array(
-					'id'       => 'tax_query',
+					'id'      => 'tax_query_relation',
+					'label'   => 'Relation',
+					'desc'    => 'The logical relationship between each inner taxonomy list',
+					'type'    => 'select',
+					'options' => array(
+						''    => 'Select...',
+						'AND' => 'AND',
+						'OR'  => 'OR',
+					),
+					'tab'     => 'tax',
+					'return'  => 'string',
+				),
+				array(
+					'id'       => 'tax_query_items',
 					'label'    => 'Tax query',
 					'desc'     => 'Set tax query',
 					'type'     => 'repeater',
+					'default'  => array(),
 					'tab'      => 'tax',
 					'children' => array(
 						'taxonomy' => array(
@@ -564,7 +591,7 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 							),
 						),
 						'terms' => array(
-							'id'      => 'taxonomy',
+							'id'      => 'terms',
 							'label'   => 'Taxonomy term(s)',
 							'desc'    => 'Use comma-separated list of terms (depends from Field option)',
 							'type'    => 'text',
@@ -590,28 +617,29 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					),
 					'return'  => 'array',
 				),
+
+				/**
+				 * Date Query tab
+				 */
 				array(
-					'id'      => 'tax_query_relation',
+					'id'      => 'date_query_relation',
 					'label'   => 'Relation',
-					'desc'    => 'The logical relationship between each inner taxonomy list',
+					'desc'    => 'The logical relationship between each inner dates list',
 					'type'    => 'select',
 					'options' => array(
 						''    => 'Select...',
 						'AND' => 'AND',
 						'OR'  => 'OR',
 					),
-					'tab'     => 'tax',
+					'tab'     => 'date',
 					'return'  => 'string',
 				),
-
-				/**
-				 * Date Query tab
-				 */
 				array(
-					'id'       => 'date_query',
+					'id'       => 'date_query_items',
 					'label'    => 'Date query',
 					'desc'     => 'Set date query',
 					'type'     => 'repeater',
+					'default'  => array(),
 					'tab'      => 'date',
 					'children' => array(
 						'year' => array(
@@ -625,7 +653,7 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 						'month' => array(
 							'id'      => 'month',
 							'label'   => 'Month',
-							'desc'    => 'Month number (from 1 to 12)',
+							'desc'    => 'From 1 to 12',
 							'type'    => 'text',
 							'default' => '',
 							'return'  => 'string',
@@ -633,15 +661,7 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 						'week' => array(
 							'id'      => 'week',
 							'label'   => 'Week',
-							'desc'    => 'Week of the year (from 0 to 53)',
-							'type'    => 'text',
-							'default' => '',
-							'return'  => 'string',
-						),
-						'week' => array(
-							'id'      => 'week',
-							'label'   => 'Week',
-							'desc'    => 'Week of the year (from 0 to 53)',
+							'desc'    => 'From 0 to 53',
 							'type'    => 'text',
 							'default' => '',
 							'return'  => 'string',
@@ -649,7 +669,7 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 						'day' => array(
 							'id'      => 'day',
 							'label'   => 'Day',
-							'desc'    => 'Day of the month (from 1 to 31)',
+							'desc'    => 'From 1 to 31',
 							'type'    => 'text',
 							'default' => '',
 							'return'  => 'string',
@@ -672,19 +692,6 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 						),
 					),
 					'return'  => 'array',
-				),
-				array(
-					'id'      => 'date_query_relation',
-					'label'   => 'Relation',
-					'desc'    => 'The logical relationship between each inner dates list',
-					'type'    => 'select',
-					'options' => array(
-						''    => 'Select...',
-						'AND' => 'AND',
-						'OR'  => 'OR',
-					),
-					'tab'     => 'tax',
-					'return'  => 'string',
 				),
 
 				/**
