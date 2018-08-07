@@ -398,7 +398,7 @@ var WPQG = new Vue({
 
 			timeout = setTimeout( function() {
 				self.showCopySuccess = false;
-			}, 6000 );
+			}, 3000 );
 
 		},
 		copyError: function() {
@@ -414,7 +414,7 @@ var WPQG = new Vue({
 
 			timeout = setTimeout( function() {
 				self.showCopyError = false;
-			}, 6000 );
+			}, 3000 );
 
 		},
 		prepareField: function( prop ) {
