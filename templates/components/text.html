@@ -1,11 +1,11 @@
 <div class="wp-query-control wp-query-control--input">
 	<label :for="field.id" class="wp-query-control__label">{{ field.label }}</label>
-	<input 
-		class="wp-query-control__field" 
-		type="text" 
-		:id="field.id" 
+	<input
+		class="wp-query-control__field"
+		type="text"
+		:id="field.id"
 		:value="value"
-      	@input="setValue"
-    >
+		@input="setValue"
+	>
 	<div class="wp-query-control__desc" v-if="field.desc">{{ field.desc }}</div>
 </div>

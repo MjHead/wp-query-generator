@@ -110,6 +110,11 @@ var WPQG = new Vue({
 		fields: WPQGFields,
 		activeTab: 'general',
 		result: {},
+		resultFormat: 'json',
+		resultFormats: {
+			json: 'JSON',
+			php: 'PHP',
+		},
 		compareKeys: [
 			'exp_eq',
 			'exp_neq',
@@ -243,13 +248,69 @@ var WPQG = new Vue({
 
 			window.localStorage.setItem( 'wp_query_snippet', JSON.stringify( this.result ) );
 
-			return result.replace( regex, function( match ) {
+			result = result.replace( regex, function( match ) {
 				return self.compareMap[ match ];
 			} );
+
+			switch ( this.resultFormat ) {
+				case 'php':
+					return this.formatResultToPHP( result );
+
+				default:
+					return result;
+			}
 
 		}
 	},
 	methods: {
+		formatResultToPHP: function( JSONString ) {
+
+			var json    = JSON.parse( JSONString );
+				result  = '$query_args = ';
+
+			result += this.formatObject( json ) + ';\r\n\r\n';
+
+			result += '// The Query\r\n$the_query = new WP_Query( $query_args );\r\n\r\n// The Loop\r\nif ( $the_query->have_posts() ) {\r\n\twhile ( $the_query->have_posts() ) {\r\n\t\t$the_query->the_post();\r\n\t}\r\n\t/* Restore original Post Data */\r\n\twp_reset_postdata();\r\n} else {\r\n\t// no posts found\r\n}';
+
+			return result;
+		},
+		formatObject: function( json, indent ) {
+
+			var currVal     = '',
+				result      = 'array(\r\n',
+				innerIndent = '';
+
+			if ( ! indent ) {
+				indent = '';
+			}
+
+			innerIndent += indent + '\t';
+
+			for ( var prop in json ) {
+
+				if( json.hasOwnProperty( prop ) ) {
+
+					if ( 'number' === typeof json[ prop ] ) {
+						currVal = json[ prop ];
+					} else if ( 'boolean' === typeof json[ prop ] ) {
+						currVal = json[ prop ];
+					} else if ( 'string' === typeof json[ prop ] ) {
+						currVal = '\'' + json[ prop ] + '\'';
+					} else if ( json[ prop ] instanceof Array ) {
+						currVal = 'array(\'' + json[ prop ].join( '\', \'' ) + '\')';
+					} else {
+						currVal = this.formatObject( json[ prop ], innerIndent );
+					}
+
+					result += innerIndent + '\'' + prop + '\' => ' + currVal + ',\r\n';
+
+				}
+			}
+
+			result += indent + ')';
+
+			return result;
+		},
 		isActiveTab: function( tabID ) {
 			return tabID === this.activeTab;
 		},
@@ -321,6 +382,12 @@ var WPQG = new Vue({
 			codeToCopy.setAttribute('type', 'hidden');
 			window.getSelection().removeAllRanges();
 
+		},
+		copySuccess: function() {
+			window.alert( 'Query copied to clipboard' );
+		},
+		copyError: function() {
+			window.alert( 'Oops, unable to copy. Please, select and copy manually.' );
 		},
 		prepareField: function( prop ) {
 

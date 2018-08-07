@@ -81,9 +81,17 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 			);
 
 			wp_register_script(
+				'vuejs-clipboard',
+				WPQG_URL . 'assets/js/vue-clipboard.min.js',
+				array(),
+				WPQG_VERSION,
+				true
+			);
+
+			wp_register_script(
 				'wp-query-generator',
 				WPQG_URL . 'assets/js/app.js',
-				array( 'vuejs' ),
+				array( 'vuejs', 'vuejs-clipboard' ),
 				WPQG_VERSION,
 				true
 			);
@@ -497,6 +505,7 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'desc'     => 'Set meta query',
 					'type'     => 'repeater',
 					'tab'      => 'meta',
+					'cssClass' => 'meta-query',
 					'default'  => array(),
 					'children' => array(
 						'key' => array(
@@ -564,6 +573,7 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'label'    => 'Tax query',
 					'desc'     => 'Set tax query',
 					'type'     => 'repeater',
+					'cssClass' => 'tax-query',
 					'default'  => array(),
 					'tab'      => 'tax',
 					'children' => array(
@@ -639,6 +649,7 @@ if ( ! class_exists( 'WPQG_Plugin' ) ) {
 					'label'    => 'Date query',
 					'desc'     => 'Set date query',
 					'type'     => 'repeater',
+					'cssClass' => 'date-query',
 					'default'  => array(),
 					'tab'      => 'date',
 					'children' => array(

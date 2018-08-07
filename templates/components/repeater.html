@@ -1,7 +1,7 @@
 <div class="wp-query-repeater">
 	<label class="wp-query-repeater__label">{{ field.label }}</label>
 	<div class="wp-query-repeater__list">
-		<div class="wp-query-repeater__row" v-for="( row, index ) in value">
+		<div :class="[ 'wp-query-repeater__row', field.cssClass ]" v-for="( row, index ) in value">
 			<div class="wp-query-repeater__row-item" v-for="( childValue, key ) in row">
 				<component
 					v-bind:is="currentControl( field.children[ key ].type )"

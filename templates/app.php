@@ -18,14 +18,24 @@
 	</div>
 </div>
 <div class="wp-query-result">
-	<div class="wp-query-result__title">
-		Generated Query
+	<div class="wp-query-result__header">
+		<div class="wp-query-result__title">
+			Generated Query
+		</div>
+		<div class="wp-query-switcher">
+			<div
+				v-for="( formatLabel, format ) in resultFormats"
+				:class="[ 'wp-query-switcher__item', { 'wp-query-switcher-active': resultFormat === format } ]"
+				@click="resultFormat = format"
+			>{{ formatLabel }}</div>
+		</div>
 	</div>
-	<div class="wp-query-result__content">
-		{{ formatResult }}
-		<input type="hidden" id="query_to_copy" :value="formatResult">
-	</div>
+	<div class="wp-query-result__content">{{ formatResult }}</div>
 	<div class="wp-query-result__actions">
-		<button @click="copyQuery">Copy to Clipboard</button>
+		<button
+			v-clipboard:copy="formatResult"
+			v-clipboard:success="copySuccess"
+			v-clipboard:error="copyError"
+		>Copy to Clipboard</button>
 	</div>
 </div>
