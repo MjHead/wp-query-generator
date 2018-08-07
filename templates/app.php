@@ -37,5 +37,19 @@
 			v-clipboard:success="copySuccess"
 			v-clipboard:error="copyError"
 		>Copy to Clipboard</button>
+		<div class="wp-query-result__msg">
+			<transition name="slide-in-out">
+				<div class="wp-query-result__msg-item wp-query-result__success" v-if="showCopySuccess">
+					<span>&#10003;</span>
+					Query copied to clipboard!
+				</div>
+			</transition>
+			<transition name="slide-in-out">
+				<div class="wp-query-result__msg-item wp-query-result__error" v-if="showCopyError">
+					<span>&times;</span>
+					Oops, unable to copy. Please, select and copy manually.
+				</div>
+			</transition>
+		</div>
 	</div>
 </div>

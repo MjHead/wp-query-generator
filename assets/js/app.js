@@ -111,6 +111,8 @@ var WPQG = new Vue({
 		activeTab: 'general',
 		result: {},
 		resultFormat: 'json',
+		showCopySuccess: false,
+		showCopyError: false,
 		resultFormats: {
 			json: 'JSON',
 			php: 'PHP',
@@ -384,10 +386,36 @@ var WPQG = new Vue({
 
 		},
 		copySuccess: function() {
-			window.alert( 'Query copied to clipboard' );
+			this.showCopySuccess = true;
+			this.showCopyError   = false;
+
+			var self = this,
+				timeout;
+
+			if ( timeout ) {
+				clearTimeout( timeout );
+			}
+
+			timeout = setTimeout( function() {
+				self.showCopySuccess = false;
+			}, 6000 );
+
 		},
 		copyError: function() {
-			window.alert( 'Oops, unable to copy. Please, select and copy manually.' );
+			this.showCopySuccess = false;
+			this.showCopyError   = true;
+
+			var self = this,
+				timeout;
+
+			if ( timeout ) {
+				clearTimeout( timeout );
+			}
+
+			timeout = setTimeout( function() {
+				self.showCopyError = false;
+			}, 6000 );
+
 		},
 		prepareField: function( prop ) {
 
