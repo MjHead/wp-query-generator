@@ -113,6 +113,7 @@ var WPQG = new Vue({
 		resultFormat: 'json',
 		showCopySuccess: false,
 		showCopyError: false,
+		defaults: {},
 		resultFormats: {
 			json: 'JSON',
 			php: 'PHP',
@@ -166,6 +167,10 @@ var WPQG = new Vue({
 
 			var key   = field.id,
 				value = null;
+
+			if ( field.default ) {
+				Vue.set( self.defaults, key, field.default );
+			}
 
 			if ( saved && saved[ key ] ) {
 				value = saved[ key ];
@@ -265,6 +270,27 @@ var WPQG = new Vue({
 		}
 	},
 	methods: {
+		resetQuery: function() {
+
+			for ( var prop in this.result ) {
+
+				if ( this.result.hasOwnProperty( prop ) ) {
+
+					if ( this.defaults[ prop ] ) {
+						if ( 'meta_query_items' == prop || 'tax_query_items' == prop || 'date_query_items' == prop ) {
+							Vue.set( this.result, prop, [] );
+						} else {
+							Vue.set( this.result, prop, this.defaults[ prop ] );
+						}
+					} else {
+						Vue.delete( this.result, prop );
+					}
+
+				}
+
+			}
+
+		},
 		formatResultToPHP: function( JSONString ) {
 
 			var json    = JSON.parse( JSONString );

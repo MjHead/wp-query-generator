@@ -51,5 +51,9 @@
 				</div>
 			</transition>
 		</div>
+		<button
+			class="wp-query-reset"
+			@click="resetQuery"
+		>Reset Query</button>
 	</div>
 </div>
